@@ -13,6 +13,28 @@ def parse_file(filter=None, column=None):
 
 
 
+def apply_filter(root, data, filter, column):
+
+    # Filter NFes
+    i = 0
+    for row in data:
+        row_splitted = row.strip().split(';')
+        if filter_validate(filter, column, row_splitted):
+            root = get_nfe(root, row_splitted, i)
+        i += 1
+    return root
+
+
+
+def filter_validate(filter, column, row_splitted):
+
+    # Validate filter
+    if filter == row_splitted[column]:
+        return True
+    return False
+
+
+
 def nfes_all(root, data):
 
     # Get all NFes
@@ -57,24 +79,3 @@ def get_amount(row_splitted, *args):
     amount = str(round(amount, 2)).replace('.', ',')
     return amount
 
-
-
-def apply_filter(root, data, filter, column):
-
-    # Filter NFes
-    i = 0
-    for row in data:
-        row_splitted = row.strip().split(';')
-        if filter_validate(filter, column, row_splitted):
-            root = get_nfe(root, row_splitted, i)
-        i += 1
-    return root
-
-
-
-def filter_validate(filter, column, row_splitted):
-
-    # Validate filter
-    if filter == row_splitted[column]:
-        return True
-    return False
