@@ -23,5 +23,7 @@ urlpatterns = [
     # NFe
     url(r'^api/nfe/all/$', Nfes.as_view()),
     url(r'^api/nfe/tipo/(?P<type>.+)$', NfeType.as_view()),
-
+    url(r'^api/nfe/chave/(?P<key>.+)$', NfeKey.as_view()),
+    url(r'^api/nfe/cnpjcpf/(?P<personal_doc>.+)$', NfePersonalDocument.as_view()),
+    url(r'^api/nfe/status/(?P<status>.+)$', NfeStatus.as_view()),
 ]
