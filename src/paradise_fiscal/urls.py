@@ -22,5 +22,6 @@ urlpatterns = [
 
     # NFe
     url(r'^api/nfe/all/$', Nfes.as_view()),
+    url(r'^api/nfe/tipo/(?P<type>.+)$', NfeType.as_view()),
 
 ]

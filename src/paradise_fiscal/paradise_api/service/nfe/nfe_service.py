@@ -12,3 +12,11 @@ def get_all():
     if data:
         return Response({'Dados': data}, HTTP_200_OK)
     return Response({'Dados': 'Nenhum documento encontrado.'}, HTTP_404_NOT_FOUND)
+
+
+def get_filter(filter, column):
+    
+    data = parse_file(filter, column)
+    if data:
+        return Response({'Dados': data}, HTTP_200_OK)
+    return Response({'Dados': 'Documento não encontrado'}, HTTP_404_NOT_FOUND)
