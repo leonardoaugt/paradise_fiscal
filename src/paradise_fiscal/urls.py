@@ -21,10 +21,15 @@ from paradise_fiscal.paradise_api.views import *
 
 urlpatterns = [
 
+    # NFeTransaction
+    url(r'^api/nfetran/resume/$'), NfeTran.as_view()),
+    url(r'^api/nfetran/resume/(?P<key>.+)$'), NfeTranKey.as_view()),
+
     # NFe
     url(r'^api/nfe/all/$', Nfes.as_view()),
     url(r'^api/nfe/tipo/(?P<type>.+)$', NfeType.as_view()),
     url(r'^api/nfe/chave/(?P<key>.+)$', NfeKey.as_view()),
     url(r'^api/nfe/cnpjcpf/(?P<personal_doc>.+)$', NfePersonalDocument.as_view()),
     url(r'^api/nfe/status/(?P<status>.+)$', NfeStatus.as_view()),
+
 ]
