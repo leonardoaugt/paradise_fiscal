@@ -23,16 +23,16 @@ class NfeKey(APIView):
     def get(self, request, key):
 
         column = 6
-        filtered_data = get_filter(key, column)
-        return filtered_data
+        response = get_filter(key, column)
+        return response
 
 
 class NfePersonalDocument(APIView):
     def get(self, request, personal_doc):
         
         column = 2
-        filtered_data = get_filter(personal_doc, column)
-        return filtered_data
+        response = get_filter(personal_doc, column)
+        return response
 
 
 class NfeStatus(APIView):
@@ -40,5 +40,19 @@ class NfeStatus(APIView):
 
         column = 11
         status = status.upper()
-        filtered_data = get_filter(status, column)
-        return filtered_data
+        response = get_filter(status, column)
+        return response
+
+
+class NfeTran(APIView):
+    def get(self, request):
+
+        response = get_nfetran()
+        return response
+
+
+class NfeTranKey(APIView):
+    def get(self, request, key):
+
+        response = get_nfetran_key(key)
+        return response
