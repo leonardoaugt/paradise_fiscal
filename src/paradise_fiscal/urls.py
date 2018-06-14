@@ -16,6 +16,7 @@ Including another URLconf
 
 from django.conf.urls import url
 from django.contrib import admin
+
 from paradise_fiscal.paradise_api.views import *
 
 urlpatterns = [
