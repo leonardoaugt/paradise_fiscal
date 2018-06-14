@@ -41,9 +41,9 @@ def nfes_all(root, data):
     # Get all NFes
     i = 0
     for row in data:
+        i += 1
         row_splitted = row.strip().split(';')
         root = get_nfe(root, row_splitted, i)
-        i += 1
     return root
 
 
