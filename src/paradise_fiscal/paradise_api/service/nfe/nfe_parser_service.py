@@ -1,4 +1,4 @@
-from .nfe_reader_service import read_file
+from ..utils.utils import read_file
 
 
 def parse_file(filter=None, column=None):
