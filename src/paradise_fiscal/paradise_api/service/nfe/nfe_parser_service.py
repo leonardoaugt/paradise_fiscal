@@ -5,6 +5,7 @@ def parse_file(filter=None, column=None):
 
     root = {}
     data = read_file('NFe.txt')
+    data.pop(0) # Remove headers
     if filter and column:
         root = apply_filter(root, data, filter, column)
     else:
