@@ -36,6 +36,17 @@ def get_nfe(root, row_splitted, i):
         'ValorICMS': row_splitted[9],
         'ValorIPI': row_splitted[10],
         'Status': row_splitted[11],
+        'Totalizador': get_amount(row_splitted, 7, 8, 9, 10)
         }
     return root
 
+
+def get_amount(row_splitted, *args):
+
+    # amount = ValorTotal + ValorProd + ValorICMS + ValorIPI
+    amount = 0
+    for arg in args:
+        value = float(row_splitted[arg].replace(',', '.'))
+        amount += value
+    amount = str(round(amount, 2)).replace('.', ',')
+    return amount
