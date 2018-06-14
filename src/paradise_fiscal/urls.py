@@ -21,6 +21,6 @@ from paradise_fiscal.paradise_api.views import *
 urlpatterns = [
 
     # NFe
-    url(r'^api/nfe/$', Nfes.as_view()),
+    url(r'^api/nfe/all/$', Nfes.as_view()),
 
 ]

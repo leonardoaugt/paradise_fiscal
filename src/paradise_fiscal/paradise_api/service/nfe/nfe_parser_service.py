@@ -17,9 +17,7 @@ def nfes_all(root, data):
         row_splitted = row.strip().split(';')
         root = get_nfe(root, row_splitted, i)
         i += 1
-    f = open('nfes_all.txt', 'w')
-    f.write(str(root))
-    f.close()
+    return root
 
 
 def get_nfe(root, row_splitted, i):
@@ -41,5 +39,3 @@ def get_nfe(root, row_splitted, i):
         }
     return root
 
-
-parse_file()
