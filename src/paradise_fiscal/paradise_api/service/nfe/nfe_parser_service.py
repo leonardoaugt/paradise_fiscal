@@ -17,7 +17,7 @@ def parse_file(filter=None, column=None):
 def apply_filter(root, data, filter, column):
 
     # Filter NFes
-    i = 0
+    i = 1
     for row in data:
         row_splitted = row.strip().split(';')
         if filter_validate(filter, column, row_splitted):
@@ -39,11 +39,11 @@ def filter_validate(filter, column, row_splitted):
 def nfes_all(root, data):
 
     # Get all NFes
-    i = 0
+    i = 1
     for row in data:
-        i += 1
         row_splitted = row.strip().split(';')
         root = get_nfe(root, row_splitted, i)
+        i += 1
     return root
 
 
