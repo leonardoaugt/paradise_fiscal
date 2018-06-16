@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 
 from .service.nfe.nfe_service import get_all, get_filter
+from .service.nfetran.nfetran_service import get_nfetran, get_nfetran_key
 
 
 class Nfes(APIView):
