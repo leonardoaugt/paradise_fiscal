@@ -22,8 +22,8 @@ from paradise_fiscal.paradise_api.views import *
 urlpatterns = [
 
     # NFeTransaction
-    url(r'^api/nfetran/resume/$', NfeTran.as_view()),
-    url(r'^api/nfetran/resume/(?P<key>.+)$', NfeTranKey.as_view()),
+    url(r'^api/nfetran/transacoes/$', NfeTran.as_view()),
+    url(r'^api/nfetran/transacao/chave/(?P<key>.+)$', NfeTranKey.as_view()),
 
     # NFe
     url(r'^api/nfe/all/$', Nfes.as_view()),
