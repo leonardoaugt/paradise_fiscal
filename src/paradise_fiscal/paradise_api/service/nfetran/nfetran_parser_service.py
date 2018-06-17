@@ -28,7 +28,7 @@ def get_transactions(data, idproc):
     return transactions
 
 
-def parse_file():
+def nfetran_parse_file():
     
     root = {
         'total_transacoes': 0,

@@ -1,7 +1,7 @@
 from ..utils.utils import read_file
 
 
-def parse_file(filter=None, column=None):
+def nfe_parse_file(filter=None, column=None):
 
     root = {}
     data = read_file('NFe.txt')
