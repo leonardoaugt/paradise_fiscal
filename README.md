@@ -13,11 +13,11 @@ Para instalar as dependências do projeto, rode o comando `pip install -r requir
 ## API ##
 Para rodar a aplicação, certifique-se de estar no mesmo diretório do arquivo manager.py, e rode o comando `python manage.py runserver`.  
 A aplicação irá rodar em `http://localhost:8000`  
-##Métodos disponíveis
-###Transações
+## Métodos disponíveis
+### Transações
 api/nfetran/transacoes/  
 api/nfetran/transacao/chave/[parametro]  
-###Documentos
+### Documentos
 api/nfe/all/  
 api/nfe/tipo/[parametro]  
 api/nfe/chave/[parametro]  
