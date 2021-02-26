@@ -21,5 +21,10 @@ Existem 2 arquivos em formato texto que deverão ser processados:
          ii. Quantas transações foram autorizadas com sucesso
          iii. Estatística por SEFAZ-UF
 
+         i. Um agrupamento dos erros de timeout e motivos de rejeições, motivo 79, 65, 50 e etc, quantitativamente.
+         ii. Quantas transações únicas foram realizadas com sucesso, em que não ocorreu nenhum tipo de problema, erro de timeout e rejeição.
+         iii. Agrupamento por Sefaz, mostrando os resultados de sucessos, erros, totais de transações.
+
+
 2) Criar o frontend para consumo dos serviços criados acima.
 
