@@ -1,7 +1,7 @@
-import pytest
+from pathlib import Path, PurePath
 
 
-class Parser:
+class DocExtractor:
     DATE_POSITION = 0
     TYPE_POSITION = 1
     PERSONAL_ID_POSITION = 2
@@ -15,10 +15,7 @@ class Parser:
     IPI_AMOUNT_POSITION = 10
     STATUS_POSITION = 11
 
-    def parse(self, content: list):
-        return self.make_dict(content)
-
-    def make_dict(self, content):
+    def __call__(self, content: list):
         try:
             return {
                 'Data': content[self.DATE_POSITION],
@@ -44,41 +41,24 @@ class Parser:
         return float(n.replace(',', '.'))
 
 
-@pytest.fixture
-def parser():
-    content = [
-        '16/04/2017',
-        'E',
-        '04867532983',
-        '515521624',
-        '3',
-        '55',
-        '89958861455662550443256825625984378899008104',
-        '9919,80',
-        '9622,21',
-        '1732,00',
-        '769,78',
-        'AUTORIZADO',
-    ]
-    return Parser().parse(content)
+class Parser:
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-@pytest.mark.parametrize(
-    'key,expected',
-    [
-        ('Data', '16/04/2017'),
-        ('Tipo', 'E'),
-        ('CnpjCpf', '04867532983'),
-        ('Numero', '515521624'),
-        ('Serie', '3'),
-        ('Modelo', '55'),
-        ('Chave', '89958861455662550443256825625984378899008104'),
-        ('ValorTotal', 9919.80),
-        ('ValorProd', 9622.21),
-        ('ValorICMS', 1732.00),
-        ('ValorIPI', 769.78),
-        ('Status', 'AUTORIZADO'),
-    ],
-)
-def test_parser(parser, key, expected):
-    assert parser[key] == expected
+class DocumentsParser(Parser):
+    ...
+
+
+class TransactionsParser(Parser):
+    def __init__(self, file='NFeTran.txt'):
+        self.file = file
+
+    def __call__(self, docs):
+        self.keys = docs.keys()
+        return self.parse_transactions(docs)
+
+    def parse_transactions(self, docs):
+        fpath = PurePath.joinpath(self.BASE_DIR, self.file)
+        with open(fpath, 'r') as f:
+            for row in f:
+                ...
