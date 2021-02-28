@@ -1,6 +1,8 @@
+from textwrap import dedent
+
 import pytest
 
-from core.parsers import DocExtractor, TransactionsParser, DocumentsParser
+from core.parsers import InvoiceExtractor, TransactionsParser, InvoicesParser
 
 
 class TestExtractor:
@@ -20,7 +22,7 @@ class TestExtractor:
             '769,78',
             'AUTORIZADO',
         ]
-        return DocExtractor().extract(content)
+        return InvoiceExtractor().extract(content)
 
     @pytest.mark.parametrize(
         'key,expected',
@@ -43,7 +45,7 @@ class TestExtractor:
         assert extractor[key] == expected
 
 
-class TestDocumentsParser:
+class TestInvoicesParser:
     def test_parser(self):
         expect = {
             '89958861455662550443256825625984378899008104': {
@@ -62,33 +64,42 @@ class TestDocumentsParser:
             }
         }
         filters = {'Chave': '89958861455662550443256825625984378899008104'}
-        dp = DocumentsParser(filters)
+        dp = InvoicesParser(filters=filters, file='NFe.txt')
         assert dp.parse() == expect
 
 
 class TestTransactionsParser:
     def test_parse(self):
-        tp = TransactionsParser()
+        tp = TransactionsParser(file='NFeTran.txt')
         docs = {'72494092851953317464101717301780592482317859': {}}
         expect = {
             '72494092851953317464101717301780592482317859': {
                 'Transacoes': [
-                    [
-                        '#IdProc 96990 InitTran Início de transação',
-                        '#IdProc 220 Log ClientConnect',
-                        '#IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859',
-                        '#IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.',
-                        '#IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!',
-                        '#IdProc 5513 EndTran Fim de transação',
-                    ]
+                    dedent(
+                        """\
+                        #IdProc 96990 InitTran Início de transação
+                        #IdProc 220 Log ClientConnect
+                        #IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859
+                        #IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.
+                        #IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!
+                        #IdProc 5513 EndTran Fim de transação
+                        """
+                    )
                 ]
             }
         }
         assert tp.parse(docs) == expect
 
     def test_must_extract(self):
-        tp = TransactionsParser()
-        row = '#IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859'
+        tp = TransactionsParser(file='NFeTran.txt')
+        row = """
+            #IdProc 96990 InitTran Início de transação
+            #IdProc 220 Log ClientConnect
+            #IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859
+            #IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.
+            #IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!
+            #IdProc 5513 EndTran Fim de transação
+        """
         keys = [
             '72494092851953317464101717301780592482317859',
             '89958861455662550443256825625984378899008104',
@@ -97,12 +108,21 @@ class TestTransactionsParser:
         assert tp.must_extract(row, keys) is True
 
     def test_get_key(self):
-        tp = TransactionsParser()
-        row = '#IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859'
-        assert tp.get_key(row) == '72494092851953317464101717301780592482317859'
+        tp = TransactionsParser(file='NFeTran.txt')
+        transactions = """
+            #IdProc 96990 InitTran Início de transação
+            #IdProc 220 Log ClientConnect
+            #IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859
+            #IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.
+            #IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!
+            #IdProc 5513 EndTran Fim de transação
+        """
+        assert (
+            tp.get_key(transactions) == '72494092851953317464101717301780592482317859'
+        )
 
     def test_add_transaction(self):
-        tp = TransactionsParser()
+        tp = TransactionsParser(file='NFeTran.txt')
         rows = [
             '#IdProc 96990 InitTran Início de transação',
             '#IdProc 220 Log ClientConnect',

@@ -1,9 +1,10 @@
+import re
 from pathlib import Path, PurePath
 
 from core.filter import Filter
 
 
-class DocExtractor:
+class InvoiceExtractor:
     DATE_POSITION = 0
     TYPE_POSITION = 1
     PERSONAL_ID_POSITION = 2
@@ -47,18 +48,17 @@ class Parser:
     BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-class DocumentsParser(Parser):
-    FILE = 'NFe.txt'
-    DELIMITER = ';'
-
-    def __init__(self, filters=None):
+class InvoicesParser(Parser):
+    def __init__(self, file, delimiter=';', filters=None):
+        self.file = file
+        self.delimiter = delimiter
         self.filters = filters
         self.filter = Filter()
-        self.extractor = DocExtractor()
+        self.extractor = InvoiceExtractor()
 
     def parse(self):
         docs = {}
-        with open(self.FILE, 'r') as f:
+        with open(self.file, 'r') as f:
             for row in f:
                 doc = self.parse_doc(row.strip())
 
@@ -69,48 +69,50 @@ class DocumentsParser(Parser):
             return docs
 
     def parse_doc(self, data):
-        values = data.split(self.DELIMITER)
+        values = data.split(self.delimiter)
         return self.extractor.extract(values)
 
 
 class TransactionsParser(Parser):
     CONTENT_RANGE = 2
 
-    def __init__(self, file='NFeTran.txt'):
+    def __init__(self, file):
         self.file = file
 
     def parse(self, docs):
         fpath = PurePath.joinpath(self.BASE_DIR, self.file)
         with open(fpath, 'r') as f:
-            transactions = []
+            transactions = ''
 
             for row in f:
-                transactions.append(row.strip())
+                transactions = transactions + row
 
-                if len(transactions) == 6:
-                    row_transaction_id = transactions[2]
-
-                    if self.must_extract(row_transaction_id, docs.keys()):
-                        key = self.get_key(row_transaction_id.strip())
+                if 'EndTran' in row:
+                    if self.must_extract(transactions, docs.keys()):
+                        key = self.get_key(transactions.strip())
                         self.add_transactions(transactions, docs[key])
 
-                    transactions = []
+                    transactions = ''
 
             return docs
 
     @staticmethod
-    def must_extract(row, keys):
-        return any(key in row for key in keys)
+    def must_extract(key, keys):
+        return any(k in key for k in keys)
 
     @staticmethod
     def add_transactions(rows, doc):
-        if 'Transacoes' not in doc:
-            doc['Transacoes'] = []
+        prefix = 'Transacoes'
 
-        doc['Transacoes'].append(rows)
+        if prefix not in doc:
+            doc[prefix] = []
+
+        doc[prefix].append(rows)
         return doc
 
     @staticmethod
-    def get_key(row):
-        prefix = 'envolvida: '
-        return row.split(prefix)[1]
+    def get_key(content):
+        pattern = '(.*)'
+        starts_with = 'NF-e envolvida:'
+        result = re.search(f"{starts_with}{pattern}", content)
+        return result.group(1).strip()

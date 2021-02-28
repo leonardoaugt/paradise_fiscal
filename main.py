@@ -1,16 +1,17 @@
-from core.parsers import DocumentsParser, TransactionsParser
+from core.parsers import InvoicesParser, TransactionsParser
 
 
 class Reader:
-    def __init__(self, filters=None):
-        self.documents_parser = DocumentsParser(filters)
-        self.transactions = TransactionsParser()
-        self.documents = self.get_documents()
+    def __init__(
+        self, filters=None, invoices_file='NFe.txt', transactions_file='NFeTran.txt'
+    ):
+        self.invoices_parser = InvoicesParser(file=invoices_file, filters=filters)
+        self.transactions_parser = TransactionsParser(file=transactions_file)
+        self.invoices = self.get_invoices()
 
-    def get_documents(self):
-        docs = self.documents_parser.parse()
-        docs = self.transactions.parse(docs)
-        return docs
+    def get_invoices(self):
+        docs = self.invoices_parser.parse()
+        return self.transactions_parser.parse(docs)
 
 
 if __name__ == '__main__':
