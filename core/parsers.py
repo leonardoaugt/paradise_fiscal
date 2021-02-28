@@ -82,37 +82,32 @@ class TransactionsParser(Parser):
     def parse(self, docs):
         fpath = PurePath.joinpath(self.BASE_DIR, self.file)
         with open(fpath, 'r') as f:
-            must_extract = False
-            counter = 0
-            key = None
+            transactions = []
 
             for row in f:
-                if self.key_in_row(row, docs.keys()) or must_extract:
-                    if not key:
-                        key = self.get_key(row.strip())
+                transactions.append(row.strip())
 
-                    self.add_transaction(row.strip(), docs[key])
+                if len(transactions) == 6:
+                    row_transaction_id = transactions[2]
 
-                    must_extract = True
-                    counter += 1
+                    if self.must_extract(row_transaction_id, docs.keys()):
+                        key = self.get_key(row_transaction_id.strip())
+                        self.add_transactions(transactions, docs[key])
 
-                if counter == 3:
-                    must_extract = False
-                    counter = 0
-                    key = None
+                    transactions = []
 
             return docs
 
     @staticmethod
-    def key_in_row(row, keys):
+    def must_extract(row, keys):
         return any(key in row for key in keys)
 
     @staticmethod
-    def add_transaction(row, doc):
+    def add_transactions(rows, doc):
         if 'Transacoes' not in doc:
             doc['Transacoes'] = []
 
-        doc['Transacoes'].append(row)
+        doc['Transacoes'].append(rows)
         return doc
 
     @staticmethod
