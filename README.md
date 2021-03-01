@@ -9,8 +9,7 @@ Parser de arquivos fiscais e transações
 2. Crie um virtualenv com Python 3.7.
 3. Ative o virtualenv.
 4. Instale as dependências.
-5. Configure a instância com o .env.
-6. Execute os testes.
+5. Execute os testes.
 
 ```console
 git clone git@github.com:sleonardoaugusto/paradise_fiscal.git
