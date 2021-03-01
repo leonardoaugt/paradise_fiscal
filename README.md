@@ -4,8 +4,8 @@
 
 Parser de arquivos fiscais e transações
 
-## How to setup
-1. Clone this repo;
+## Como configurar?
+1. Clone este repositório.
 2. Crie um virtualenv com Python 3.7.
 3. Ative o virtualenv.
 4. Instale as dependências.
