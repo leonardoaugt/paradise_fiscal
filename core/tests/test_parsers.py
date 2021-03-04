@@ -63,7 +63,11 @@ class TestInvoicesParser:
                 'Status': 'AUTORIZADO',
             }
         }
-        filters = {'Chave': '89958861455662550443256825625984378899008104'}
+        filters = {
+            'Chave': '89958861455662550443256825625984378899008104',
+            'DataInicio': '',
+            'DataFim': '',
+        }
         dp = InvoicesParser(filters=filters, file='NFe.txt')
         assert dp.parse() == expect
 
