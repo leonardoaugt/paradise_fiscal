@@ -8,8 +8,13 @@ class Filter:
                 return doc
 
         if doc and filters['DataInicio'] and filters['DataFim']:
-            start = datetime.date(datetime.strptime(filters['DataInicio'], '%d/%m/%Y'))
-            end = datetime.date(datetime.strptime(filters['DataFim'], '%d/%m/%Y'))
-            ref = datetime.date(datetime.strptime(doc['Data'], '%d/%m/%Y'))
+
+            def to_python(date):
+                return datetime.date(datetime.strptime(date, '%d/%m/%Y'))
+
+            start = to_python(filters['DataInicio'])
+            end = to_python(filters['DataFim'])
+            ref = to_python(doc['Data'])
+
             if start <= ref <= end:
                 return doc
