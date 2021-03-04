@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/sleonardoaugusto/paradise_fiscal/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/sleonardoaugusto/paradise_fiscal/actions/workflows/ci-cd.yaml)
 
-Parser de arquivos fiscais e transações
+Parser de documentos fiscais e transações
 
 ## Como configurar?
 1. Clone este repositório.
