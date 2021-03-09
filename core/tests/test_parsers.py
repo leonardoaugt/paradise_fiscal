@@ -68,8 +68,8 @@ class TestInvoicesParser:
             'DataInicio': '',
             'DataFim': '',
         }
-        dp = InvoicesParser(filters=filters, file='NFe.txt')
-        assert dp.parse() == expect
+        ip = InvoicesParser(filters=filters, file='NFe.txt')
+        assert ip.parse() == expect
 
 
 class TestTransactionsParser:
@@ -111,6 +111,23 @@ class TestTransactionsParser:
         ]
         assert tp.must_extract(row, keys) is True
 
+    def test_must_not_extract(self):
+        tp = TransactionsParser(file='NFeTran.txt')
+        row = """
+            #IdProc 96990 InitTran Início de transação
+            #IdProc 220 Log ClientConnect
+            #IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859
+            #IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.
+            #IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!
+            #IdProc 5513 EndTran Fim de transação
+        """
+        keys = [
+            '28579234544455136265328526707294411257012079',
+            '89958861455662550443256825625984378899008104',
+            '19529899511922440710220225593997181644125803',
+        ]
+        assert tp.must_extract(row, keys) is False
+
     def test_get_key(self):
         tp = TransactionsParser(file='NFeTran.txt')
         transactions = """
@@ -135,16 +152,4 @@ class TestTransactionsParser:
             '#IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!',
             '#IdProc 5513 EndTran Fim de transação',
         ]
-        expect = {
-            'Transacoes': [
-                [
-                    '#IdProc 96990 InitTran Início de transação',
-                    '#IdProc 220 Log ClientConnect',
-                    '#IdProc 41401 Log Chave transação NF-e envolvida: 72494092851953317464101717301780592482317859',
-                    '#IdProc 1552 Send NF-e recebida pelo servidor. Gerada requisição para a SEFAZ-SP em modo normal.',
-                    '#IdProc 89294 Return A SEFAZ autorizou (Protocolo de autorização 556849) a NF-e com sucesso!',
-                    '#IdProc 5513 EndTran Fim de transação',
-                ]
-            ]
-        }
-        assert tp.add_transactions(rows, {}) == expect
+        assert tp.add_transactions(rows, {}) == {'Transacoes': [rows]}
