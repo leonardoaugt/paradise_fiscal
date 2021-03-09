@@ -74,8 +74,6 @@ class InvoicesParser(Parser):
 
 
 class TransactionsParser(Parser):
-    CONTENT_RANGE = 2
-
     def __init__(self, file):
         self.file = file
 
