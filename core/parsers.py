@@ -86,7 +86,7 @@ class TransactionsParser(Parser):
                 transactions = transactions + row
 
                 if 'EndTran' in row:
-                    if self.must_extract(transactions, docs.keys()):
+                    if self.should_extract(transactions, docs.keys()):
                         key = self.get_key(transactions.strip())
                         self.add_transactions(transactions, docs[key])
 
@@ -95,7 +95,7 @@ class TransactionsParser(Parser):
             return docs
 
     @staticmethod
-    def must_extract(key, keys):
+    def should_extract(key, keys):
         return any(k in key for k in keys)
 
     @staticmethod

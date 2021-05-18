@@ -94,7 +94,7 @@ class TestTransactionsParser:
         }
         assert tp.parse(docs) == expect
 
-    def test_must_extract(self):
+    def test_should_extract(self):
         tp = TransactionsParser(file='NFeTran.txt')
         row = """
             #IdProc 96990 InitTran Início de transação
@@ -109,9 +109,9 @@ class TestTransactionsParser:
             '89958861455662550443256825625984378899008104',
             '19529899511922440710220225593997181644125803',
         ]
-        assert tp.must_extract(row, keys) is True
+        assert tp.should_extract(row, keys) is True
 
-    def test_must_not_extract(self):
+    def test_should_not_extract(self):
         tp = TransactionsParser(file='NFeTran.txt')
         row = """
             #IdProc 96990 InitTran Início de transação
@@ -126,7 +126,7 @@ class TestTransactionsParser:
             '89958861455662550443256825625984378899008104',
             '19529899511922440710220225593997181644125803',
         ]
-        assert tp.must_extract(row, keys) is False
+        assert tp.should_extract(row, keys) is False
 
     def test_get_key(self):
         tp = TransactionsParser(file='NFeTran.txt')

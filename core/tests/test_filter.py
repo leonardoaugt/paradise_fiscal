@@ -22,7 +22,7 @@ def document():
 
 
 class TestKeyFilter:
-    def test_must_return_document(self, document):
+    def test_should_return_document(self, document):
         filters = {
             'Chave': '72494092851953317464101717301780592482317859',
             'DataInicio': '',
@@ -31,7 +31,7 @@ class TestKeyFilter:
         filter = Filter()
         assert filter(document, filters) == document
 
-    def test_must_return_none(self, document):
+    def test_should_return_none(self, document):
         filters = {
             'Chave': '89958861455662550443256825625984378899008104',
             'DataInicio': '',
@@ -42,12 +42,12 @@ class TestKeyFilter:
 
 
 class TestDateFilter:
-    def test_must_return_document(self, document):
+    def test_should_return_document(self, document):
         filters = {'Chave': '', 'DataInicio': '13/04/2017', 'DataFim': '16/04/2017'}
         filter = Filter()
         assert filter(document, filters) == document
 
-    def test_must_return_none(self, document):
+    def test_should_return_none(self, document):
         filters = {'Chave': '', 'DataInicio': '14/04/2017', 'DataFim': '16/04/2017'}
         filter = Filter()
         assert filter(document, filters) is None
